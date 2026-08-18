@@ -1,0 +1,29 @@
+# Copy to ~/.config/voice_r/config.yml and adjust as needed.
+whisper:
+  server_url: "http://127.0.0.1:8081"
+  language: ja # pin to your primary spoken language. "auto" exists but was observed to
+               # misdetect short utterances as an unrelated language - avoid it.
+               # Override per-call with `voice_r transcribe PATH.wav en` when needed.
+  match_threshold: 0.82
+  # Sent as whisper's initial_prompt to bias decoding toward known vocabulary.
+  # Confirmed to fix real misrecognitions, e.g. "git push" was misheard as
+  # "にっとプッシュ" with no prompt, but transcribed correctly as "Git push"
+  # once this prompt was supplied. English command-form phrasing worked best -
+  # better than an equivalent katakana-only prompt in testing. Extend this list
+  # with your own frequently-misheard commands as you find them; a full
+  # vocabulary-driven version of this is planned for milestone M5.
+  prompt: "git status, git push, git pull, git commit, git commit --amend --no-edit, git branch, git checkout, git merge, git rebase, git stash, git diff, git log, git push --force-with-lease"
+
+audio:
+  capture_cmd: parecord # this machine has parecord but not pw-record; switch to pw-record if available
+  sample_rate: 16000
+
+injection:
+  tool: ydotool
+  # ydotool bypasses the IME (uinput keycode synthesis), so with ibus/mozc
+  # active in conversion mode, typed romaji gets reinterpreted as kana
+  # (confirmed: "hello" -> "へっぉ"). Set this to your IME's direct/English
+  # engine name and voice_r will switch to it before injecting and back to
+  # whatever was active afterward. Find engine names with `ibus list-engine`;
+  # check the active one with `ibus engine`. Leave empty to disable.
+  ime_direct_engine: "xkb:us::eng"
