@@ -14,6 +14,7 @@ class ConfigTest < Minitest::Test
       assert_equal 16000, config.sample_rate
       assert_equal "ydotool", config.injection_tool
       assert_equal "", config.ime_direct_engine
+      assert_in_delta 0.4, config.clipboard_paste_delay
     end
   end
 
@@ -47,6 +48,21 @@ class ConfigTest < Minitest::Test
       config = VoiceR::Config.load(path)
       assert_equal "ydotool", config.injection_tool
       assert_equal "xkb:us::eng", config.ime_direct_engine
+    end
+  end
+
+  def test_clipboard_paste_delay_override_merges_with_defaults
+    Dir.mktmpdir do |dir|
+      path = File.join(dir, "config.yml")
+      File.write(path, <<~YAML)
+        injection:
+          clipboard_paste_delay: 1.0
+      YAML
+
+      config = VoiceR::Config.load(path)
+      assert_in_delta 1.0, config.clipboard_paste_delay
+      assert_equal "ydotool", config.injection_tool
+      assert_equal "", config.ime_direct_engine
     end
   end
 end
