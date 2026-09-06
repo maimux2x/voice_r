@@ -25,7 +25,12 @@ module VoiceR
       @state_machine = StateMachine.new
       @recorder = Recorder.new(capture_cmd: @config.capture_cmd, sample_rate: @config.sample_rate, logger: @logger)
       @notifier = Notifier.new(logger: @logger)
-      @injector = Injector.new(tool: @config.injection_tool, ime_direct_engine: @config.ime_direct_engine, logger: @logger)
+      @injector = Injector.new(
+        tool: @config.injection_tool,
+        ime_direct_engine: @config.ime_direct_engine,
+        clipboard_paste_delay: @config.clipboard_paste_delay,
+        logger: @logger
+      )
       @last_transcript = nil
       @mutex = Mutex.new
     end

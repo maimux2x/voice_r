@@ -27,3 +27,9 @@ injection:
   # whatever was active afterward. Find engine names with `ibus list-engine`;
   # check the active one with `ibus engine`. Leave empty to disable.
   ime_direct_engine: "xkb:us::eng"
+  # ydotool can't inject non-ASCII text at all (no keycode exists for
+  # kana/kanji, regardless of IME state). Text that fails ascii_only? is
+  # instead routed through the clipboard (wl-copy + a ydotool-simulated
+  # Ctrl+V), with the clipboard's prior content restored after this many
+  # seconds. See the wl-clipboard setup section in README.
+  clipboard_paste_delay: 0.4

@@ -29,7 +29,16 @@ module VoiceR
         # injection so ydotool's raw uinput keystrokes aren't reinterpreted
         # as kana by a conversion-mode IME (confirmed: "hello" -> "へっぉ"
         # with mozc-jp active). Empty/nil disables the switch entirely.
-        "ime_direct_engine" => ""
+        "ime_direct_engine" => "",
+        # ydotool can't inject non-ASCII text at all (no keycode exists for
+        # kana/kanji, regardless of IME state). Text that fails
+        # String#ascii_only? is instead routed through the clipboard:
+        # wl-copy loads it, ydotool sends a Ctrl+V keystroke, then the
+        # clipboard's prior content is restored after this many seconds
+        # (giving the target app time to actually read the paste before
+        # it's overwritten - a placeholder value pending empirical tuning,
+        # like the recorder's SIGINT-vs-SIGTERM timing).
+        "clipboard_paste_delay" => 0.4
       }
     }.freeze
 
@@ -78,6 +87,10 @@ module VoiceR
 
     def ime_direct_engine
       data.dig("injection", "ime_direct_engine")
+    end
+
+    def clipboard_paste_delay
+      data.dig("injection", "clipboard_paste_delay")
     end
 
     def self.deep_merge(base, override)
