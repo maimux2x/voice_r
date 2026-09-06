@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require_relative "../lib/voice_r/cli"
+
+VoiceR::CLI.new(ARGV).run

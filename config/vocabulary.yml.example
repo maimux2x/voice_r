@@ -1,0 +1,10 @@
+# Copy to ~/.config/voice_r/vocabulary.yml and adjust as needed.
+# Not yet consumed by the code (planned for milestone M4) - this is the target format.
+version: 1
+entries:
+  - trigger: "アメンド"
+    aliases: ["あめんど", "amend"]
+    expansion: "git commit --amend --no-edit"
+  - trigger: "push force"
+    aliases: ["force push"]
+    expansion: "git push --force-with-lease"
